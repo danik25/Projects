@@ -1,0 +1,104 @@
+{
+  "emails": [
+    {
+      "subject": "Coding academy first project",
+      "body": "Lets start creating our very first project!",
+      "isRead": false,
+      "isStarred": false,
+      "sentAt": "15:04 AM",
+      "removedAt": null,
+      "from": "Dani Benjamin",
+      "to": "Ron Krov"
+    },
+    {
+      "subject": "Lets create Gmail!",
+      "body": "Build an email client app – based on Gmail UI and UX. \nThe user will be able to view his inbox and other folders, to look into an email and to compose new emails.",
+      "isRead": false,
+      "isStarred": false,
+      "sentAt": "Feb 25",
+      "removedAt": null,
+      "from": "Mickey Mouse",
+      "to": "Dani Benjamin"
+    },
+    {
+      "subject": "We were on a break!",
+      "body": "As stated in the subject, we were on a break, and you are being unfair! ",
+      "isRead": false,
+      "isStarred": false,
+      "sentAt": "Feb 18",
+      "removedAt": null,
+      "from": "Ross Geller",
+      "to": "Dani Benjamin"
+    },
+    {
+      "subject": "Awake?",
+      "body": "Hello there!",
+      "isRead": false,
+      "isStarred": false,
+      "sentAt": "Jan 15",
+      "removedAt": null,
+      "from": "Albert Einstein",
+      "to": "Dani Benjamin"
+    },
+    {
+      "subject": "Investment idea",
+      "body": "Attached is my proposal.",
+      "isRead": false,
+      "isStarred": false,
+      "sentAt": "Jan 13",
+      "removedAt": null,
+      "from": "Dani Benjamin",
+      "to": "Bill Gates"
+    },
+    {
+      "subject": "Hi, following our correspondence...",
+      "body": "As stated in our conversation, blah blah blah!",
+      "isRead": false,
+      "isStarred": false,
+      "sentAt": "2023",
+      "removedAt": null,
+      "from": "Dani Din",
+      "to": "Dani Benjamin"
+    },
+    {
+      "subject": "consectetur adipiscing elit",
+      "body": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+      "isRead": false,
+      "isStarred": false,
+      "sentAt": "2023",
+      "removedAt": null,
+      "from": "Lorem Ipsum",
+      "to": "Dani Benjamin"
+    },
+    {
+      "subject": "Give me back my dog",
+      "body": "My Dog! my precious dog!",
+      "isRead": true,
+      "isStarred": false,
+      "sentAt": "2023",
+      "removedAt": null,
+      "from": "The Queen",
+      "to": "Dani Benjamin"
+    },
+    {
+      "subject": "Coding academy LAST project",
+      "body": "abc",
+      "isRead": false,
+      "isStarred": false,
+      "sentAt": "2023",
+      "removedAt": null,
+      "from": "Dani Benjamin",
+      "to": "Dani Benjamin"
+    },
+    {
+      "subject": "Lets have Pizza!",
+      "body": "I want Pizza so mush! lets go have Pizza today",
+      "isRead": false,
+      "isStarred": false,
+      "sentAt": "2022",
+      "removedAt": null,
+      "from": "Nushi",
+      "to": "Dushi"
+    }
+  ]
+}

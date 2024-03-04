@@ -1,0 +1,24 @@
+.email-index-container {
+  display: grid;
+  gap: 15px;
+}
+.index-header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.gmail-logo-font {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  font: normal 16px Google Sans, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 20px;
+}
+
+.email-filter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
