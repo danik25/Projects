@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { emailService } from "../services/email.service";
 
-export function EmailDetails({emailId}) {
+export function EmailDetails() {
     const [email, setEmail] = useState(null)
     const navigate = useNavigate()
+    const { emailId } = useParams();
 
     useEffect(() => {
         loadEmail()
@@ -15,7 +17,7 @@ export function EmailDetails({emailId}) {
             const email = await emailService.getById(emailId)
             setEmail(email)
         } catch (err) {
-            navigate('/email')
+            navigate('/mail/inbox')
             console.log('Error in loadEmails', err)
         }
     }

@@ -39,7 +39,7 @@ export function EmailPreview({
 
   function handleEmailClick() {
     console.log("Clicked!");
-    navigate(`/email/${email.id}`);
+    navigate(`/mail/inbox/${email.id}`);
     onEmailRead(email, true);
   }
 

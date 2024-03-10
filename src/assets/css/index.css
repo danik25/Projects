@@ -16,6 +16,7 @@
 @import "./cmps/email-list.css";
 @import "./cmps/side-bar.css";
 @import "./cmps/email-buttons.css";
+@import "./cmps/email-compose.css";
 
 /* Filters */
 @import "./cmps/search-filter.css";

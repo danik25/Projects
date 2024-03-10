@@ -6,42 +6,36 @@ export const emailService = {
   save,
   remove,
   getById,
-  getDefaultFilter,
 };
 
 const STORAGE_KEY = "emails";
-_createInputEmails(); // Only create the input emails at this point
+_createInputEmails(); // Creates the 'Dummy' email input.
 
 async function query(filterBy) {
   let emails = await storageService.query(STORAGE_KEY);
-  let { isRead, substring } = filterBy;
+  let { isRead, searchStr } = filterBy;
 
-  if (filterBy) {
-    emails = emails.filter((email) => {
-      substring = substring.toLowerCase();
-      const emailBody = email.body.toLowerCase();
-      const emailSubject = email.subject.toLowerCase();
-
-      const includesSubString =
-        emailBody.includes(substring) || emailSubject.includes(substring);
-
-      if (isRead != undefined) {
-        return email.isRead === isRead && includesSubString;
-      }
-
-      return includesSubString;
-    });
+  // First, check if should return only "deleted" emails
+  if (filterBy.removedAt) {
+    return emails.filter((email) => email.removedAt)
   }
 
-  return emails;
+  // Else, filter out the 'deleted' emails
+  emails = emails.filter((email) => !email.removedAt)
+
+
+  // Apply filter for search in body and subject
+  emails = searchStr
+    ? _searchInBody(emails, searchStr)
+    : emails;
+  
+  emails = isRead != undefined ? _applyIsReadFiler(emails, isRead) : emails // Apply filter for 'isRead'
+  emails = _applyPageFilter(emails, filterBy) // Apply filter for side branch
+  
+
+  return emails
 }
 
-function getDefaultFilter() {
-  return {
-    isRead: undefined,
-    substring: "",
-  };
-}
 
 async function getById(emailId) {
   return storageService.get(STORAGE_KEY, emailId);
@@ -60,6 +54,41 @@ function save(email) {
   }
 }
 
+function _applyIsReadFiler(emails, filterBy) {
+  return emails.filter((email) => {
+    if (email.isRead != undefined) {
+      return email.isRead === filterBy
+    }
+
+    return true;
+  });
+}
+
+function _searchInBody(emails, searchStr) {
+  return emails.filter((email) => {
+    searchStr = searchStr && searchStr.toLowerCase();
+    const emailBody = email.body.toLowerCase();
+    const emailSubject = email.subject.toLowerCase();
+
+    return emailBody.includes(searchStr) || emailSubject.includes(searchStr);
+  });
+}
+
+function _applyPageFilter(emails, filterBy) {
+  return emails.filter((email) => {
+    if (filterBy.isStarred) {
+      return email.isStarred === filterBy.isStarred
+    } else if (filterBy.to) {
+      return email.to === filterBy.to
+    } else if (filterBy.from) {
+      return email.from === filterBy.from
+    }
+
+    return emails
+
+  })
+}
+
 function _createEmail(email) {
   let id = utilService.makeId();
 
@@ -67,19 +96,25 @@ function _createEmail(email) {
     id,
     subject: email.subject,
     body: email.body,
-    isRead: email.isRead,
-    isStarred: email.isStarred,
-    sentAt: email.sentAt,
-    removedAt: email.removedAt,
+    isRead: false,
+    isStarred: false,
+    sentAt: _getActualTime(),
+    removedAt: null,
     from: email.from,
     to: email.to,
   };
 }
 
+function _getActualTime() {
+  const currentHour = (new Date()).getHours()
+  const timeOfDay = currentHour >= 12 ? 'PM' : 'AM'
+
+  return `${currentHour} ${timeOfDay}`
+}
 async function _createInputEmails() {
   let emails = utilService.loadFromStorage(STORAGE_KEY);
 
-  if (emails || emails.length) {
+  if (emails && emails.length) {
     return;
   }
   const dummyEmailsArray = await getDummyArr();

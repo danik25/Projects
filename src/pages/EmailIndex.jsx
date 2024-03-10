@@ -1,37 +1,90 @@
 import { useEffect, useState } from "react";
-; import { useParams } from "react-router-dom";
+import { Outlet, useParams, useSearchParams } from "react-router-dom";
 
 import { EmailList } from "../cmps/EmailList";
 import { DropDownFilter } from "../cmps/DropDownFilter";
 import { SearchFilter } from "../cmps/SearchFilter";
-import { EmailDetails } from "./EmailDetails";
+import { EmailCompose } from "../cmps/EmailCompose";
+
 
 import logoUrl from "../assets/imgs/Gmail_Logo_24px.png";
 import { emailService } from "../services/email.service"
 
-export function EmailIndex() {
-  const [emails, setEmails] = useState(null);
-  const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
+export function EmailIndex({ updateUnreadCount, loggedUser }) {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [shouldPresentCompose, setShouldPresentCompose] = useState(searchParams.has('compose'))
+
+  const [emails, setEmails] = useState(null)
+  const [filterBy, setFilterBy] = useState(searchParams)
+
+  const [filerByPage, setFilerByPage] = useState("inbox")
 
   const [emailId, setEmailId] = useState("");
 
   const params = useParams();
+ 
+
+  useEffect(() => {
+    if (searchParams.get("compose") === "new") {
+        setShouldPresentCompose(true)
+    }
+  }, [searchParams])
+  // Handle the folder on the side bar
+  useEffect(() => {
+    dynamicPageState(params.page)
+  }, [params.page])
 
   useEffect(() => {
     toggleState();
   }, [params.emailId]);
 
   useEffect(() => {
+    setSearchParams(filterBy)
     loadEmails();
   }, [filterBy]);
 
+
+  async function dynamicPageState(page) {
+    switch (page) {
+      case 'inbox':
+        setFilterBy({ to: loggedUser })
+        break
+      case 'starred':
+        setFilterBy({isStarred: true})
+        break
+      case 'sent':
+        setFilterBy({ from: loggedUser })
+        break
+      case 'trash':
+        setFilterBy({ removedAt: !null })
+        break
+      default:
+        // nothing
+    }
+  }
   function toggleState() {
     setEmailId(params.emailId);
   }
+
   function onSetFilter(fieldsToUpdate) {
     setFilterBy((prevFilter) => ({ ...prevFilter, ...fieldsToUpdate }));
   }
 
+  async function onComposeExit() {
+    setShouldPresentCompose(false)
+    setSearchParams("")
+  }
+
+  async function onComposeEmail(newEmail) {
+    try {
+      await emailService.save(newEmail);
+      loadEmails(filterBy)
+      onComposeExit()
+
+    } catch (err) {
+      console.log("Failed while creating new email:", err)
+    }
+  }
   async function onEmailStar(email, isStarred) {
     const newEmail = { ...email, isStarred: isStarred };
 
@@ -49,22 +102,30 @@ export function EmailIndex() {
     }
   }
   async function onEmailDelete(email) {
-    console.log("email deleted: ", email.id);
-
     try {
-      await emailService.remove(email.id);
-
+      // Email is already in 'Trash', should be removed permanently
+      if (email.removedAt) { 
+        await emailService.remove(email.id);
+      } else {
+        // Email gets a removal date, and will appear only in 'Trash'
+        const removedEmail = { ...email, removedAt: new Date() };
+        await emailService.save(removedEmail)
+      }
+      
       setEmails((prevEmails) => {
         return prevEmails.filter((filterEmail) => filterEmail.id !== email.id);
       });
     } catch (err) {
-      console.log("Error in onRemoveRobot", err);
+      console.log("Error while removing email", err);
     }
   }
 
   async function onEmailRead(email, isRead) {
     const newEmail = { ...email, isRead: isRead };
     console.log("onEmailRead");
+
+    const updateCount = isRead ? -1 : 1;
+    updateUnreadCount(updateCount)
     try {
       const updatedEmail = await emailService.save(newEmail);
       console.log("saved: ", updatedEmail);
@@ -93,6 +154,8 @@ export function EmailIndex() {
     return "Loading...";
   }
 
+  const { searchStr } = filterBy
+
   return (
     <section className="email-index-container">
       <section className="index-header">
@@ -100,13 +163,13 @@ export function EmailIndex() {
           <img src={logoUrl} alt="Gmail Logo" /> Gmail
         </section>
         <SearchFilter
-          filterBy={filterBy}
+          filterBy={{ searchStr }}
           onSetFilter={onSetFilter}
           toggleState={toggleState}
         />
       </section>
 
-      {emailId && <EmailDetails emailId={emailId} />}
+      
       {!emailId && (
         <div className="email-filter-list">
           <DropDownFilter filterBy={filterBy} onSetFilter={onSetFilter} />
@@ -118,6 +181,10 @@ export function EmailIndex() {
           />
         </div>
       )}
+      <Outlet />
+
+      {shouldPresentCompose && <EmailCompose onComposeExit={onComposeExit} onComposeEmail={onComposeEmail} loggedUser={loggedUser} />}
+      
     </section>
   );
 }

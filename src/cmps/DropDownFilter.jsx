@@ -1,21 +1,12 @@
 import React, { useEffect, useState } from "react";
 
 export function DropDownFilter({ filterBy, onSetFilter }) {
-  const [inputValue, setInputValue] = useState("");
-
-  function handleSearchSubmit(ev) {
-    ev.preventDefault(); // Prevent the default form submission behavior
-
-    let { value } = ev.target;
-
-    const newObject = { ...filterBy, substring: value };
-    onSetFilter(newObject);
-  }
 
   function handleIsReadChange(ev) {
     ev.preventDefault();
 
-    let { value, name } = ev.target;
+    let { value, name:field } = ev.target;
+
     let actualValue = undefined;
     switch (value) {
       case "false":
@@ -25,8 +16,7 @@ export function DropDownFilter({ filterBy, onSetFilter }) {
         actualValue = true;
     }
 
-    const newObject = { ...filterBy, [name]: actualValue };
-    onSetFilter(newObject);
+    onSetFilter({ [field]: actualValue })
   }
 
   return (

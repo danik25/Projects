@@ -94,7 +94,7 @@
       "subject": "Lets have Pizza!",
       "body": "I want Pizza so mush! lets go have Pizza today",
       "isRead": false,
-      "isStarred": false,
+      "isStarred": true,
       "sentAt": "2022",
       "removedAt": null,
       "from": "Nushi",

@@ -3,30 +3,30 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 export function SearchFilter({ filterBy, onSetFilter, toggleState }) {
-  const [searchInput, setSearchInput] = useState("");
+  const [filterByToEdit, setFilterByEdit] = useState(filterBy);
   const params = useParams();
   const navigate = useNavigate();
 
-  function handleContentChange(ev) {
-    ev.preventDefault(); // Prevent the default form submission behavior
+  function handleTypeChange(ev) {
+    ev.preventDefault()
 
-    const value = ev.target.value;
+    const { value, name:field } = ev.target;
 
-    setSearchInput(value);
+    setFilterByEdit(prevFilter => {
+      return { ...prevFilter, [field]: value }
+      })
   }
 
-  function handleSearchSubmit(ev) {
-    ev.preventDefault(); // Prevent the default form submission behavior
+  function onSubmit(ev) {
+    ev.preventDefault()
 
     // Check if the current location is a certain email
     if (params.emailId) {
-      navigate("/email");
+      navigate("/mail/inbox");
       toggleState();
     }
 
-    const value = searchInput;
-    const newObject = { ...filterBy, substring: value };
-    onSetFilter(newObject);
+    onSetFilter({ searchStr: filterByToEdit.searchStr });
   }
 
   return (
@@ -34,12 +34,13 @@ export function SearchFilter({ filterBy, onSetFilter, toggleState }) {
       <span className="search-logo">
         <FaMagnifyingGlass />
       </span>
-      <form onSubmit={handleSearchSubmit}>
+      <form onSubmit={onSubmit}>
         <input
           type="text"
-          value={searchInput}
+          name="searchStr"
+          value={filterByToEdit.searchStr}
           placeholder="Search"
-          onChange={handleContentChange}
+          onChange={handleTypeChange}
         />
       </form>
     </div>
