@@ -1,0 +1,37 @@
+.custom-msg-container {
+    display: flex;
+    position: absolute; /* Position element relative to its containing block */
+    bottom: 20px; /* Align to the bottom */
+    left: 25px; /* Align to the right */
+
+    font-family: "Google Sans", Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+    padding: 15px;
+    border-radius: 10px;
+    color: #545454;
+
+    box-shadow: rgba(0,0,0,.2) 0 2px 6px;
+}
+
+.custom-msg-btn {
+    margin-left: auto;
+    border: none;
+    
+}
+
+.custom-msg-container.success .custom-msg-btn {
+    background-color: rgb(255, 255, 255);
+    color: #545454;
+}
+.custom-msg-container.success {
+    background-color: rgb(255, 255, 255);
+}
+
+.custom-msg-container.failure {
+    background-color: #FFCCCC;
+}
+
+.custom-msg-container.failure .custom-msg-btn {
+    background-color: #FFCCCC;
+    color: #3f3f3f;
+}
+

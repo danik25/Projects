@@ -1,3 +1,5 @@
+import { useSearchParams } from "react-router-dom";
+
 import { GoStarFill } from "react-icons/go";
 import { FaRegStar } from "react-icons/fa";
 
@@ -6,6 +8,7 @@ import { useNavigate } from "react-router";
 
 import { Date } from "./Date";
 import { EmailButtons } from "./EmailButtons";
+import { emailService } from "../services/email.service";
 
 export function EmailPreview({
   email,
@@ -13,6 +16,15 @@ export function EmailPreview({
   onEmailRead,
   onEmailStar,
 }) {
+
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  // TODO: create option to present time of a draft
+  // const presentedTime = email.sentAt
+  //   if(!email.sentAt) {
+  //     presentedTime = utilService.createTime()
+  //   }
+  
   const [emailRightSide, setEmailRightSide] = useState(
     <Date date={email.sentAt} />
   );
@@ -38,9 +50,13 @@ export function EmailPreview({
   }
 
   function handleEmailClick() {
-    console.log("Clicked!");
-    navigate(`/mail/inbox/${email.id}`);
-    onEmailRead(email, true);
+    if (email.sentAt) { // In case sentAt exists, the email is not 'draft'
+      navigate(`/mail/inbox/${email.id}`);
+      onEmailRead(email, true);
+    } else {
+      setSearchParams({ compose: email.id })
+    }
+    
   }
 
   const isReadClass = email.isRead ? "read" : "";
@@ -58,6 +74,7 @@ export function EmailPreview({
       onMouseOver={onEmailHovered}
       onMouseOut={onEmailUnHovered}
     >
+      <input type="checkbox"></input>
       <div className="star" onClick={handleCheckboxChange}>
         {isStarMarked}
       </div>

@@ -5,6 +5,9 @@ import { EmailList } from "../cmps/EmailList";
 import { DropDownFilter } from "../cmps/DropDownFilter";
 import { SearchFilter } from "../cmps/SearchFilter";
 import { EmailCompose } from "../cmps/EmailCompose";
+import { CustomMsg } from "../cmps/CustomMsg";
+
+import {eventBusService} from '../services/event-bus.service'
 
 
 import logoUrl from "../assets/imgs/Gmail_Logo_24px.png";
@@ -17,15 +20,13 @@ export function EmailIndex({ updateUnreadCount, loggedUser }) {
   const [emails, setEmails] = useState(null)
   const [filterBy, setFilterBy] = useState(searchParams)
 
-  const [filerByPage, setFilerByPage] = useState("inbox")
-
   const [emailId, setEmailId] = useState("");
 
   const params = useParams();
  
 
   useEffect(() => {
-    if (searchParams.get("compose") === "new") {
+    if (searchParams.has("compose")) {
         setShouldPresentCompose(true)
     }
   }, [searchParams])
@@ -47,16 +48,19 @@ export function EmailIndex({ updateUnreadCount, loggedUser }) {
   async function dynamicPageState(page) {
     switch (page) {
       case 'inbox':
-        setFilterBy({ to: loggedUser })
+        setFilterBy({ to: loggedUser, sentAt: !null, removedAt: null })
         break
       case 'starred':
-        setFilterBy({isStarred: true})
+        setFilterBy({isStarred: true, removedAt: null})
         break
       case 'sent':
-        setFilterBy({ from: loggedUser })
+        setFilterBy({ from: loggedUser, sentAt: !null, removedAt: null })
         break
       case 'trash':
         setFilterBy({ removedAt: !null })
+        break
+      case 'drafts':
+        setFilterBy({ sentAt: null,  from: loggedUser, removedAt: null})
         break
       default:
         // nothing
@@ -75,13 +79,17 @@ export function EmailIndex({ updateUnreadCount, loggedUser }) {
     setSearchParams("")
   }
 
-  async function onComposeEmail(newEmail) {
-    try {
-      await emailService.save(newEmail);
-      loadEmails(filterBy)
-      onComposeExit()
 
+  async function onComposeEmail(newEmail) {
+    console.log("email compose")
+    try {
+      const currentEmail = newEmail.id ? await emailService.getById(newEmail.id) : {}
+      const savedEmail = await emailService.save({ ...currentEmail, ...newEmail })
+
+      setSearchParams({ compose: savedEmail.id })
+      loadEmails(filterBy)
     } catch (err) {
+      eventBusService.emit('custom-msg',{txt:"Failed to create a new email.", type:'failure'})
       console.log("Failed while creating new email:", err)
     }
   }
@@ -96,7 +104,7 @@ export function EmailIndex({ updateUnreadCount, loggedUser }) {
           return currEmail.id === updatedEmail.id ? updatedEmail : currEmail;
         })
       );
-      emailService.save(newEmail);
+      await emailService.save(newEmail);
     } catch (err) {
       console.log("Error in updating email staring", err);
     }
@@ -184,6 +192,7 @@ export function EmailIndex({ updateUnreadCount, loggedUser }) {
       <Outlet />
 
       {shouldPresentCompose && <EmailCompose onComposeExit={onComposeExit} onComposeEmail={onComposeEmail} loggedUser={loggedUser} />}
+      <CustomMsg/>
       
     </section>
   );

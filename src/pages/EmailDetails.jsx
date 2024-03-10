@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router";
+
 import { emailService } from "../services/email.service";
+import {eventBusService} from '../services/event-bus.service'
 
 export function EmailDetails() {
     const [email, setEmail] = useState(null)
@@ -17,6 +19,7 @@ export function EmailDetails() {
             const email = await emailService.getById(emailId)
             setEmail(email)
         } catch (err) {
+            eventBusService.emit('custom-msg',{txt:"Failed to open requested email", type:'failure'})
             navigate('/mail/inbox')
             console.log('Error in loadEmails', err)
         }

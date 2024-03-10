@@ -2,6 +2,7 @@ export const utilService = {
   makeId,
   saveToStorage,
   loadFromStorage,
+  createTime,
 };
 
 function makeId(length = 5) {
@@ -21,4 +22,11 @@ function saveToStorage(key, value) {
 function loadFromStorage(key, defaultValue = null) {
   var value = localStorage[key] || defaultValue;
   return JSON.parse(value);
+}
+
+function createTime() {
+  const currentHour = (new Date()).getHours()
+  const currentMinute = (new Date()).getMinutes()
+  const timeOfDay = currentHour >= 12 ? 'PM' : 'AM'
+  return `${currentHour}:${currentMinute} ${timeOfDay}`
 }

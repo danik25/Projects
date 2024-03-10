@@ -4,7 +4,7 @@ import { Outlet, useSearchParams } from "react-router-dom";
 
 export function SideBar({unreadCount}) {
     // Search params, for 'compose'
-    const [setSearchParams] = useSearchParams() 
+    const [searchParams, setSearchParams] = useSearchParams() 
     
     function handleClick() {
         setSearchParams({compose:'new'})
