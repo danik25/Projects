@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 
 export function DropDownFilter({ filterBy, onSetFilter }) {
-
   // const [filterByToEdit, setFilterByEdit] = useState(filterBy);
 
   function handleIsReadChange(ev) {
     ev.preventDefault();
 
-    let { value, name:field } = ev.target;
+    let { value, name: field } = ev.target;
 
     let actualValue = undefined;
     switch (value) {
@@ -18,7 +17,7 @@ export function DropDownFilter({ filterBy, onSetFilter }) {
         actualValue = true;
     }
 
-    onSetFilter({ [field]: actualValue })
+    onSetFilter({ [field]: actualValue });
   }
 
   return (

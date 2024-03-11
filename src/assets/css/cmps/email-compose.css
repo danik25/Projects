@@ -19,17 +19,20 @@
 
 .email-compose-container.expand{
     width: 1500px;
-    height: 800px;
     font-size: .875rem;
 
     bottom: 2%;
-    left: 15%;
+    left: 10%;
 
     box-shadow: rgba(0,0,0,.4) 0 4px 300px;    
 }
 
 .email-compose-container.expand .compose-e-s-btn{
     font-size: 12px;   
+}
+
+.email-compose-container.expand .compose-body{
+    height: 600px;  
 }
 
 .email-compose-header {
@@ -116,7 +119,6 @@
 /* Footer */
 .email-compose-footer {
     display: flex;
-    height: 100%;
 }
 
 .compose-send-btn {

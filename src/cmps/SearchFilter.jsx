@@ -2,28 +2,32 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
-export function SearchFilter({ filterBy, onSetFilter, toggleState }) {
+export function SearchFilter({
+  filterBy,
+  onSetFilter,
+  toggleListDetailsState,
+}) {
   const [filterByToEdit, setFilterByEdit] = useState(filterBy);
   const params = useParams();
   const navigate = useNavigate();
 
   function handleTypeChange(ev) {
-    ev.preventDefault()
+    ev.preventDefault();
 
-    const { value, name:field } = ev.target;
+    const { value, name: field } = ev.target;
 
-    setFilterByEdit(prevFilter => {
-      return { ...prevFilter, [field]: value }
-      })
+    setFilterByEdit((prevFilter) => {
+      return { ...prevFilter, [field]: value };
+    });
   }
 
   function onSubmit(ev) {
-    ev.preventDefault()
+    ev.preventDefault();
 
     // Check if the current location is a certain email
     if (params.emailId) {
       navigate("/mail/inbox");
-      toggleState();
+      toggleListDetailsState();
     }
 
     onSetFilter({ searchStr: filterByToEdit.searchStr });

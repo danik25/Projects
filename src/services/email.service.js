@@ -7,57 +7,38 @@ export const emailService = {
   remove,
   getById,
   getArgumentsFromId,
+  getDefaultFilter,
 };
 
 const STORAGE_KEY = "emails";
 _createInputEmails(); // Creates the 'Dummy' email input.
 
+function getDefaultFilter(filter) {
+  return {
+    isRead: filter.isRead != null ? filter.isRead : undefined,
+    removedAt: null,
+  };
+}
+
 async function getArgumentsFromId(draftEmailId) {
   try {
-    const draftEmail = await getById(draftEmailId)
-    return {recipient: draftEmail.to, subject: draftEmail.subject, body: draftEmail.body, id:draftEmailId }
+    const draftEmail = await getById(draftEmailId);
+    return {
+      recipient: draftEmail.to,
+      subject: draftEmail.subject,
+      body: draftEmail.body,
+      id: draftEmailId,
+    };
   } catch (err) {
-    console.log("Failed fetching draft email", err)
-  } 
-   
-  
+    console.log("Failed fetching draft email", err);
+  }
 }
 
 async function query(filterBy) {
   let emails = await storageService.query(STORAGE_KEY);
-  let { isRead, searchStr } = filterBy;
 
-    
-  // Apply filter for search in body and subject
-  emails = searchStr
-    ? _searchInBody(emails, searchStr)
-    : emails;
-  
-  emails = isRead != undefined ? _applyIsReadFiler(emails, isRead) : emails // Apply filter for 'isRead'
-
-  emails = emails.filter((email) => filterBy.isStarred ? email.isStarred === filterBy.isStarred : true) // starred
-  emails = emails.filter((email) => filterBy.to ? email.to === filterBy.to : true) // to
-  emails = emails.filter((email) => filterBy.from ? email.from === filterBy.from : true) // from
-
-  // sentAt
-  emails = filterBy.sentAt === undefined ? emails : emails.filter((email) => {
-    if (filterBy.sentAt && filterBy.sentAt === true) {
-      return email.sentAt !== null
-    }
-    return email.sentAt === filterBy.sentAt
-  })
-
-  // removedAt
-  emails = filterBy.removedAt === undefined ? emails : emails.filter((email) => {
-    if (filterBy.removedAt && filterBy.removedAt === true) {
-      return email.removedAt !== null
-    }
-    return email.removedAt === filterBy.removedAt
-  })
-  
-  return emails
+  return _applyFilter(emails, filterBy);
 }
-
 
 async function getById(emailId) {
   return storageService.get(STORAGE_KEY, emailId);
@@ -69,22 +50,57 @@ async function remove(emailId) {
 
 async function save(email) {
   if (email.id) {
-    const updatedEmail = await storageService.put(STORAGE_KEY, email)
-    return updatedEmail
+    const updatedEmail = await storageService.put(STORAGE_KEY, email);
+    return updatedEmail;
   } else {
-    const newEmail = _createEmail(email)
-    return storageService.post(STORAGE_KEY, newEmail)
+    const newEmail = _createEmail(email);
+    return storageService.post(STORAGE_KEY, newEmail);
   }
 }
 
-function _applyIsReadFiler(emails, filterBy) {
-  return emails.filter((email) => {
-    if (email.isRead != undefined) {
-      return email.isRead === filterBy
-    }
+function _applyFilter(emails, filterBy) {
+  // Apply filter for search in body and subject
+  if (filterBy.searchStr) {
+    emails = _searchInBody(emails, filterBy.searchStr);
+  }
 
-    return true;
-  });
+  if (filterBy.isRead != null) {
+    emails = emails.filter((email) => email.isRead === filterBy.isRead);
+  }
+
+  if (filterBy.isStarred) {
+    emails = emails.filter((email) => email.isStarred === filterBy.isStarred);
+  }
+
+  if (filterBy.to) {
+    emails = emails.filter((email) => email.to === filterBy.to);
+  }
+
+  if (filterBy.from) {
+    emails = emails.filter((email) => email.from === filterBy.from);
+  }
+
+  if (filterBy.sentAt !== undefined) {
+    // null is a valid filter value fir sentAt
+    emails = emails.filter((email) => {
+      if (filterBy.sentAt === true) {
+        return email.sentAt !== null;
+      }
+      return email.sentAt === filterBy.sentAt;
+    });
+  }
+
+  if (filterBy.removedAt !== undefined) {
+    // null is a valid filter value fir removedAt
+    emails = emails.filter((email) => {
+      if (filterBy.removedAt === true) {
+        return email.removedAt !== null;
+      }
+      return email.removedAt === filterBy.removedAt;
+    });
+  }
+
+  return emails;
 }
 
 function _searchInBody(emails, searchStr) {
@@ -96,7 +112,6 @@ function _searchInBody(emails, searchStr) {
     return emailBody.includes(searchStr) || emailSubject.includes(searchStr);
   });
 }
-
 
 function _createEmail(email) {
   let id = utilService.makeId();

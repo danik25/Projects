@@ -5,6 +5,8 @@
   grid-template-columns: 240px auto 55px;
   gap: 15px;
   background-color: #f6f8fc;
+
+  height: 100vh;
 }
 
 
@@ -27,7 +29,7 @@
   border-radius: 25px 25px 0 0;
   padding-top: 15px;
   grid-area: m;
-  height: 100vh
+  height: 90vh;
 }
 
 .email-index-right {

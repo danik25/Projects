@@ -18,6 +18,7 @@
 @import "./cmps/email-compose.css";
 @import "./cmps/custom-msg.css";
 @import "./cmps/drop-down-filter.css";
+@import "./cmps/empty-folder.css";
 
 /* Filters */
 @import "./cmps/search-filter.css";

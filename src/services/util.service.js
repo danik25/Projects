@@ -25,8 +25,8 @@ function loadFromStorage(key, defaultValue = null) {
 }
 
 function createTime() {
-  const currentHour = (new Date()).getHours()
-  const currentMinute = (new Date()).getMinutes()
-  const timeOfDay = currentHour >= 12 ? 'PM' : 'AM'
-  return `${currentHour}:${currentMinute} ${timeOfDay}`
+  const currentHour = new Date().getHours();
+  const currentMinute = new Date().getMinutes();
+  const timeOfDay = currentHour >= 12 ? "PM" : "AM";
+  return `${currentHour}:${currentMinute} ${timeOfDay}`;
 }

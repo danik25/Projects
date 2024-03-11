@@ -16,15 +16,14 @@ export function EmailPreview({
   onEmailRead,
   onEmailStar,
 }) {
-
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // TODO: create option to present time of a draft
   // const presentedTime = email.sentAt
   //   if(!email.sentAt) {
   //     presentedTime = utilService.createTime()
   //   }
-  
+
   const [emailRightSide, setEmailRightSide] = useState(
     <Date date={email.sentAt} />
   );
@@ -50,13 +49,13 @@ export function EmailPreview({
   }
 
   function handleEmailClick() {
-    if (email.sentAt) { // In case sentAt exists, the email is not 'draft'
+    if (email.sentAt) {
+      // In case sentAt exists, the email is not 'draft'
       navigate(`/mail/inbox/${email.id}`);
       onEmailRead(email, true);
     } else {
-      setSearchParams({ compose: email.id })
+      setSearchParams({ compose: email.id });
     }
-    
   }
 
   const isReadClass = email.isRead ? "read" : "";
@@ -75,7 +74,7 @@ export function EmailPreview({
       onMouseOut={onEmailUnHovered}
     >
       <input type="checkbox"></input>
-      <div className="star" onClick={handleCheckboxChange}>
+      <div className="email-preview-star" onClick={handleCheckboxChange}>
         {isStarMarked}
       </div>
       <section className="clickable-section" onClick={() => handleEmailClick()}>
