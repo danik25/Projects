@@ -1,3 +1,6 @@
+import { RxHamburgerMenu } from "react-icons/rx";
+
+
 import { useEffect, useState } from "react";
 import { Outlet, useParams, useSearchParams } from "react-router-dom";
 
@@ -6,6 +9,7 @@ import { DropDownFilter } from "../cmps/DropDownFilter";
 import { SearchFilter } from "../cmps/SearchFilter";
 import { EmailCompose } from "../cmps/EmailCompose";
 import { CustomMsg } from "../cmps/CustomMsg";
+import { SideBar } from "../cmps/SideBar";
 
 import {eventBusService} from '../services/event-bus.service'
 
@@ -13,27 +17,34 @@ import {eventBusService} from '../services/event-bus.service'
 import logoUrl from "../assets/imgs/Gmail_Logo_24px.png";
 import { emailService } from "../services/email.service"
 
-export function EmailIndex({ updateUnreadCount, loggedUser }) {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const [shouldPresentCompose, setShouldPresentCompose] = useState(searchParams.has('compose'))
-
-  const [emails, setEmails] = useState(null)
-  const [filterBy, setFilterBy] = useState(searchParams)
-
-  const [emailId, setEmailId] = useState("");
+export function EmailIndex() {
+  const loggedUser = "Dani Benjamin"
 
   const params = useParams();
- 
+
+  const [searchParams, setSearchParams] = useSearchParams()
+  
+  const [shouldPresentCompose, setShouldPresentCompose] = useState(searchParams.has('compose'))
+  const [emails, setEmails] = useState(null)
+  const [filterBy, setFilterBy] = useState(searchParams)
+  const [emailId, setEmailId] = useState("");
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
+    loadCount()
+  }, [])
+  
+  
+  useEffect(() => {
     if (searchParams.has("compose")) {
-        setShouldPresentCompose(true)
+      setShouldPresentCompose(true)
     }
   }, [searchParams])
-  // Handle the folder on the side bar
+
+  // Handle the change in the side bar folder (URL params)
   useEffect(() => {
-    dynamicPageState(params.page)
-  }, [params.page])
+    folderChange(params.folder)
+  }, [params.folder])
 
   useEffect(() => {
     toggleState();
@@ -45,22 +56,33 @@ export function EmailIndex({ updateUnreadCount, loggedUser }) {
   }, [filterBy]);
 
 
-  async function dynamicPageState(page) {
-    switch (page) {
+  async function loadCount() {
+    const count = await emailService.query({ isRead: false, to: loggedUser })
+    setUnreadCount(count.length)
+  }
+  function updateUnreadCount(newCount) {
+    setUnreadCount((prevCount) => prevCount + newCount)
+  }
+
+  async function folderChange(folder) {
+    // Get existing search params for relevant filters (isRead)
+    const currentFilter = emailService.getDefaultFilter(searchParams)
+    console.log("currentFilter:", currentFilter)
+    switch (folder) {
       case 'inbox':
-        setFilterBy({ to: loggedUser, sentAt: !null, removedAt: null })
+        setFilterBy( { ...currentFilter, to: loggedUser, sentAt: !null })
         break
       case 'starred':
-        setFilterBy({isStarred: true, removedAt: null})
+        setFilterBy( {...currentFilter, isStarred: true})
         break
       case 'sent':
-        setFilterBy({ from: loggedUser, sentAt: !null, removedAt: null })
+        setFilterBy( { ...currentFilter,from: loggedUser, sentAt: !null })
         break
       case 'trash':
-        setFilterBy({ removedAt: !null })
+        setFilterBy( { ...currentFilter, removedAt: !null })
         break
       case 'drafts':
-        setFilterBy({ sentAt: null,  from: loggedUser, removedAt: null})
+        setFilterBy( { ...currentFilter, sentAt: null,  from: loggedUser})
         break
       default:
         // nothing
@@ -167,9 +189,13 @@ export function EmailIndex({ updateUnreadCount, loggedUser }) {
   return (
     <section className="email-index-container">
       <section className="index-header">
-        <section className="gmail-logo-font">
-          <img src={logoUrl} alt="Gmail Logo" /> Gmail
+        <section className="email-index-header-hamb-n-logo">
+          <section className="email-index-header-hamb" ><RxHamburgerMenu /></section>
+          <section className="email-index-header-gmail-logo">
+            <img src={logoUrl} alt="Gmail Logo" /> Gmail
+          </section>
         </section>
+        
         <SearchFilter
           filterBy={{ searchStr }}
           onSetFilter={onSetFilter}
@@ -177,22 +203,32 @@ export function EmailIndex({ updateUnreadCount, loggedUser }) {
         />
       </section>
 
+      <section className="email-index-sidebar">
+        < SideBar unreadCount={unreadCount} />
+      </section>
       
-      {!emailId && (
-        <div className="email-filter-list">
-          <DropDownFilter filterBy={filterBy} onSetFilter={onSetFilter} />
-          <EmailList
-            emails={emails}
-            onEmailRead={onEmailRead}
-            onEmailDelete={onEmailDelete}
-            onEmailStar={onEmailStar}
-          />
-        </div>
-      )}
-      <Outlet />
+      
+      <section className="email-index-main">
+        {!emailId && (
+          <div className="email-filter-list">
+            <DropDownFilter filterBy={filterBy} onSetFilter={onSetFilter} />
+            <EmailList
+              emails={emails}
+              onEmailRead={onEmailRead}
+              onEmailDelete={onEmailDelete}
+              onEmailStar={onEmailStar}
+            />
+          </div>
+        )}
+        {emailId && <Outlet />}
+      </section>
 
+      <section className="email-index-right"></section>
+      
+      
       {shouldPresentCompose && <EmailCompose onComposeExit={onComposeExit} onComposeEmail={onComposeEmail} loggedUser={loggedUser} />}
       <CustomMsg/>
+      
       
     </section>
   );

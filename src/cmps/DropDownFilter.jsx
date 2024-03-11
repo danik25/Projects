@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 
 export function DropDownFilter({ filterBy, onSetFilter }) {
 
+  // const [filterByToEdit, setFilterByEdit] = useState(filterBy);
+
   function handleIsReadChange(ev) {
     ev.preventDefault();
 
@@ -20,7 +22,7 @@ export function DropDownFilter({ filterBy, onSetFilter }) {
   }
 
   return (
-    <div>
+    <div className="drop-down-filter-container">
       <label htmlFor="isRead"></label>
 
       <select

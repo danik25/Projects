@@ -38,18 +38,15 @@ export function EmailCompose({ onComposeExit, onComposeEmail, loggedUser }) {
     }, [searchParams])
 
     useEffect(() => {
-        if (emailId) { //  Make sure that no double creation of a draft
+        timeoutIdRef.current = setTimeout(() => {
+            console.log("dani: useEffect, timeout interval")
+            saveDraft()
+        }, 5000)
 
-            timeoutIdRef.current = setTimeout(() => {
-                console.log("dani: useEffect, timeout interval")
-                saveDraft()
-            }, 5000)
-
-            return () => {
-                console.log("clear timeout")
-                clearTimeout(timeoutIdRef.current);
-              }
-        }
+        return () => {
+            console.log("clear timeout")
+            clearTimeout(timeoutIdRef.current);
+            }
     }, [emailEdit])
 
     

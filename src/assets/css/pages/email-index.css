@@ -1,17 +1,60 @@
 .email-index-container {
   display: grid;
+  grid-template-areas: "h h h "
+                        " l m r";
+  grid-template-columns: 240px auto 55px;
   gap: 15px;
-}
-.index-header {
-  display: flex;
-  gap: 20px;
-  align-items: center;
+  background-color: #f6f8fc;
 }
 
-.gmail-logo-font {
+
+/* ----------- Main distribution ----------- */ 
+
+.index-header {
+  grid-area: h;
+  display: flex;
+
+  align-items: center;
+  padding: 8px;
+}
+
+.email-index-sidebar {
+  grid-area: l;
+}
+
+.email-index-main {
+  background-color: #ffffff;
+  border-radius: 25px 25px 0 0;
+  padding-top: 15px;
+  grid-area: m;
+  height: 100vh
+}
+
+.email-index-right {
+  grid-area: r;
+}
+
+/* ----------------------------------------- */ 
+
+
+/* ----------- Header  ----------- */ 
+
+.email-index-header-hamb-n-logo {
+  display: flex;
+  width: 210px;
+  padding-right: 30px;
+}
+.email-index-header-hamb {
+  padding: 12px;
+  margin: 4px;
+  font-size: 20px;
+  margin-top: 7px;
+}
+
+.email-index-header-gmail-logo {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 7px;
 
   font: normal 16px Google Sans, Roboto, Helvetica, Arial, sans-serif;
   font-size: 20px;

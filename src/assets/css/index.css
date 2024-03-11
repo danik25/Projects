@@ -6,7 +6,6 @@
 
 /* Pages */
 @import "./pages/home.css";
-@import "./pages/main.css";
 @import "./pages/email-details.css";
 @import "./pages/email-index.css";
 
@@ -18,6 +17,7 @@
 @import "./cmps/email-buttons.css";
 @import "./cmps/email-compose.css";
 @import "./cmps/custom-msg.css";
+@import "./cmps/drop-down-filter.css";
 
 /* Filters */
 @import "./cmps/search-filter.css";

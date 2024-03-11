@@ -5,10 +5,12 @@
   border-radius: 24px;
 
   padding: 6px;
-  background-color: #e1ecf6;
+  margin: 0 96px 0 35px;
+  background-color: #eaf1fb;
 
-  min-width: 160px;
+  min-width: 580px;
   max-width: 720px;
+  height: 46px;
 }
 
 .search-filter-container input[type="text"] {
@@ -17,9 +19,8 @@
   appearance: none; /* Other browsers */
 
   /* Apply your custom styles here */
-  background-color: aliceblue;
+  background-color: #eaf1fb;
   border: none;
-  background-color: #e1ecf6;
   padding: 0;
   font: normal 16px Google Sans, Roboto, Helvetica, Arial, sans-serif;
   margin: 0;
@@ -28,5 +29,6 @@
 
 .search-logo {
   color: #7a7c7e;
-  align-self: end;
+  margin-top: 5px;
+  padding: 6px;
 }

@@ -1,3 +1,10 @@
+import { BiSolidInbox } from "react-icons/bi";
+import { MdStarBorder } from "react-icons/md";
+import { MdOutlineSend } from "react-icons/md";
+import { LuTrash2 } from "react-icons/lu";
+import { RiDraftLine } from "react-icons/ri";
+import { MdOutlineModeEdit } from "react-icons/md";
+
 import { NavLink } from "react-router-dom"
 
 import { Outlet, useSearchParams } from "react-router-dom";
@@ -11,20 +18,54 @@ export function SideBar({unreadCount}) {
     }
     return (
         <div className="side-bar-container">
-            <button className="side-bar-compose" onClick={()=>handleClick()}>Compose</button>
-            <nav className="side-bar-navs">
-                <section className="side-bar-inbox">
-                    <NavLink to="/mail/inbox">Inbox
-                    </NavLink>
-                    {unreadCount}
+            <button className="side-bar-compose" onClick={() => handleClick()}>
+                <section className="side-bar-icon">
+                    <MdOutlineModeEdit/>
                 </section>
+                Compose
+            </button>
+
+            <nav className="side-bar-navs">
+                <NavLink className="side-bar-single-nav" to="/mail/inbox">
+                    <section className="side-bar-icon">
+                        <BiSolidInbox/>
+                    </section>
+                    Inbox
+                    <section className="side-bar-single-nav-number">
+                        {unreadCount}
+                    </section>
+                    
+                </NavLink>
                 
-                <NavLink to="/mail/starred">Starred</NavLink>
-                <NavLink to="/mail/sent">Sent</NavLink>
-                <NavLink to="/mail/trash">Trash</NavLink>
-                <NavLink to="/mail/drafts">Drafts</NavLink>
+                <NavLink className="side-bar-single-nav" to="/mail/starred">
+                    <section className="side-bar-icon">
+                            <MdStarBorder/>
+                    </section>
+                    Starred
+                </NavLink>
+                
+                <NavLink className="side-bar-single-nav" to="/mail/sent">
+                    <section className="side-bar-icon">
+                        <MdOutlineSend/>
+                    </section>
+                    Sent
+                </NavLink>
+                
+                <NavLink className="side-bar-single-nav" to="/mail/trash">
+                    <section className="side-bar-icon">
+                        <LuTrash2/>
+                    </section>
+                    Trash
+                </NavLink>
+                
+                <NavLink className="side-bar-single-nav" to="/mail/drafts">
+                    <section className="side-bar-icon">
+                        <RiDraftLine/>
+                    </section>
+                    Drafts
+                </NavLink>
+                
             </nav>
-            <Outlet/>
         </div>
         
     )

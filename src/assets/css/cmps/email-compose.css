@@ -3,20 +3,18 @@
     flex-direction: column;
 
     font-family: "Google Sans", Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
-    z-index: 9999;
+    z-index: 999;
+    bottom: 0;
 
     background-color: white;
     position: absolute; /* Position element relative to its containing block */
     border-radius: 8px 8px 0 0;
     box-shadow: rgba(0,0,0,.2) 0 2px 6px;
-
-    bottom: 2%;
     
 }
 .email-compose-container.normal{
-    width: 500px;
-    right: 25px; /* Align to the right */
-    height: 70%;
+    width: 550px;
+    right: 80px; /* Align to the right */
 }
 
 .email-compose-container.expand{

@@ -11,11 +11,21 @@
       "to": "Ron Krov"
     },
     {
+      "subject": "I was here first",
+      "body": "This is a test email :)",
+      "isRead": true,
+      "isStarred": false,
+      "sentAt": "Feb 25",
+      "removedAt": null,
+      "from": "Second",
+      "to": "Dani Benjamin"
+    },
+    {
       "subject": "Lets create Gmail!",
       "body": "Build an email client app – based on Gmail UI and UX. \nThe user will be able to view his inbox and other folders, to look into an email and to compose new emails.",
       "isRead": false,
       "isStarred": false,
-      "sentAt": "Feb 25",
+      "sentAt": "Feb 24",
       "removedAt": null,
       "from": "Mickey Mouse",
       "to": "Dani Benjamin"
@@ -98,6 +108,26 @@
       "sentAt": "2022",
       "removedAt": null,
       "from": "Nushi",
+      "to": "Dani Benjamin"
+    },
+    {
+      "subject": "Im just another Email",
+      "body": "If I was an email, bidi bidi bam",
+      "isRead": false,
+      "isStarred": true,
+      "sentAt": "2022",
+      "removedAt": null,
+      "from": "Rotshield",
+      "to": "Dani Benjamin"
+    },
+    {
+      "subject": "Yonatan Hakatan",
+      "body": "Rats baboker el hagan",
+      "isRead": false,
+      "isStarred": true,
+      "sentAt": "2022",
+      "removedAt": null,
+      "from": "Hu tipes",
       "to": "Dani Benjamin"
     }
   ]
