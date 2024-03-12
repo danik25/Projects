@@ -1,9 +1,0 @@
-.button-container {
-  display: flex;
-  gap: 7px;
-}
-
-.custom-button {
-  background-color: transparent;
-  border: none;
-}
