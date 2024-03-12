@@ -47,7 +47,6 @@ export function EmailIndex() {
 
   // Handle the change in the side bar folder (URL params)
   useEffect(() => {
-    loadUser();
     folderChange(params.folder);
   }, [params.folder, loggedUser]);
 
@@ -76,6 +75,10 @@ export function EmailIndex() {
   }
 
   async function folderChange(folder) {
+    if (!Object.keys(loggedUser).length) {
+      await loadUser()
+    }
+    
     // Get existing search params for relevant filters (isRead)
     const currentFilter = emailService.getDefaultFilter(filterBy);
     console.log("currentFilter:", currentFilter);
