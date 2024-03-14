@@ -53,14 +53,41 @@ export function EmailCompose({ onComposeExit, onComposeEmail, loggedUser }) {
     setEmailEdit(emailValues);
   }
   async function saveDraft() {
-    await onComposeEmail({
+    await createEmail({
       to: emailEdit.recipient,
       from: loggedUser.userName,
       subject: emailEdit.subject,
       body: emailEdit.body,
       sentAt: null,
-      id: emailId,
-    });
+    })
+  }
+
+  async function createEmail(newEmail) {
+    try {
+      const { id } = await emailService.save({
+        to: emailEdit.recipient,
+        from: loggedUser.userName,
+        subject: emailEdit.subject,
+        body: emailEdit.body,
+        sentAt: newEmail.sentAt,
+        removedAt: null,
+        id: emailId
+      });
+
+      if (!emailId) {
+        setEmailId(id)
+      } 
+
+      await onComposeEmail();
+
+    } catch (err) {
+      console.log("Failed creating email draft ", err)
+
+      eventBusService.emit("custom-msg", {
+        txt: "Draft failed",
+        type: "failure",
+      });
+    }
   }
 
   function handleChange(ev) {
@@ -82,7 +109,7 @@ export function EmailCompose({ onComposeExit, onComposeEmail, loggedUser }) {
 
     const composeTime = utilService.createTime();
 
-    await onComposeEmail({
+    await createEmail({
       to: emailEdit.recipient,
       from: loggedUser.userName,
       subject: emailEdit.subject,
@@ -90,6 +117,7 @@ export function EmailCompose({ onComposeExit, onComposeEmail, loggedUser }) {
       sentAt: composeTime,
       id: emailId,
     });
+
     onComposeExit();
 
     eventBusService.emit("custom-msg", {

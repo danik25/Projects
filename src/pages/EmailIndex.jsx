@@ -12,7 +12,6 @@ import { SideBar } from "../cmps/SideBar";
 import { EmptyFolder } from "../cmps/EmptyFolder";
 
 import { eventBusService } from "../services/event-bus.service";
-import { userService } from "../services/user.service";
 
 import logoUrl from "../assets/imgs/Gmail_Logo_24px.png";
 import { emailService } from "../services/email.service";
@@ -22,7 +21,7 @@ export function EmailIndex() {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [loggedUser, setLoggedUser] = useState({});
+  const [loggedUser, setLoggedUser] = useState(emailService.getCurrentUser());
   const [shouldRenderCompose, setShouldRenderCompose] = useState(
     searchParams.has("compose")
   );
@@ -59,10 +58,6 @@ export function EmailIndex() {
     loadEmails();
   }, [filterBy]);
 
-  async function loadUser() {
-    const user = await userService.query();
-    setLoggedUser(user[0]);
-  }
   async function loadCount() {
     const count = await emailService.query({
       isRead: false,
@@ -75,10 +70,6 @@ export function EmailIndex() {
   }
 
   async function folderChange(folder) {
-    if (!Object.keys(loggedUser).length) {
-      await loadUser()
-    }
-    
     // Get existing search params for relevant filters (isRead)
     const currentFilter = emailService.getDefaultFilter(filterBy);
     console.log("currentFilter:", currentFilter);
@@ -123,27 +114,12 @@ export function EmailIndex() {
     setSearchParams("");
   }
 
-  async function onComposeEmail(newEmail) {
+  function onComposeEmail() {
     console.log("email compose");
-    try {
-      const currentEmail = newEmail.id
-        ? await emailService.getById(newEmail.id)
-        : {};
-      const savedEmail = await emailService.save({
-        ...currentEmail,
-        ...newEmail,
-      });
-
-      setSearchParams({ compose: savedEmail.id });
-      loadEmails(filterBy);
-    } catch (err) {
-      eventBusService.emit("custom-msg", {
-        txt: "Failed to create a new email.",
-        type: "failure",
-      });
-      console.log("Failed while creating new email:", err);
-    }
+    loadEmails(filterBy);
   }
+
+
   async function onEmailStar(email, isStarred) {
     const newEmail = { ...email, isStarred: isStarred };
 

@@ -8,11 +8,19 @@ export const emailService = {
   getById,
   getArgumentsFromId,
   getDefaultFilter,
+  getCurrentUser,
 };
 
 const STORAGE_KEY = "emails";
 _createInputEmails(); // Creates the 'Dummy' email input.
 
+
+function getCurrentUser() {
+  return {
+    userName: "Dani Benjamin",
+    userEmail: "dani@b.com",
+  }
+}
 function getDefaultFilter(filter) {
   return {
     isRead: filter.isRead != null ? filter.isRead : undefined,
