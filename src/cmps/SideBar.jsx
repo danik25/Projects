@@ -7,9 +7,9 @@ import { MdOutlineModeEdit } from "react-icons/md";
 
 import { NavLink } from "react-router-dom";
 
-import { Outlet, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
-export function SideBar({ unreadCount }) {
+export function SideBar({ unreadCount, isOpen }) {
   // Search params, for 'compose'
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -31,17 +31,21 @@ export function SideBar({ unreadCount }) {
       to={`/mail/${nav.path}`}
     >
       <section className="side-bar-icon">{nav.icon}</section>
-      {nav.path}
+      {isOpen && <section className="nav-name">
+        {nav.path}
+      </section>}
+      
     </NavLink>
   ));
 
+  const openClass = isOpen ? "open" : ""
   return (
     <div className="side-bar-container">
-      <button className="side-bar-compose" onClick={() => handleClick()}>
+      <button className={"side-bar-compose " + openClass} onClick={() => handleClick()}>
         <section className="side-bar-icon">
           <MdOutlineModeEdit />
         </section>
-        Compose
+        {isOpen && "Compose"}
       </button>
 
       <nav className="side-bar-navs">
@@ -49,9 +53,9 @@ export function SideBar({ unreadCount }) {
           <section className="side-bar-icon">
             <BiSolidInbox />
           </section>
-          Inbox
-          <section className="side-bar-single-nav-number">
-            {unreadCount}
+          {isOpen && "Inbox"}
+          <section className={"side-bar-single-nav-number " + openClass}>
+            {isOpen && unreadCount}
           </section>
         </NavLink>
 

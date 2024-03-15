@@ -29,6 +29,7 @@ export function EmailIndex() {
   const [filterBy, setFilterBy] = useState(searchParams);
   const [emailId, setEmailId] = useState("");
   const [unreadCount, setUnreadCount] = useState(0);
+  const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
     // TODO: make the user go to 'inbox' from '/mail/'
@@ -57,6 +58,10 @@ export function EmailIndex() {
     setSearchParams(filterBy);
     loadEmails();
   }, [filterBy]);
+
+  function handleHambClick() {
+    setIsOpen((prevState) => !prevState)
+  }
 
   async function loadCount() {
     const count = await emailService.query({
@@ -213,9 +218,9 @@ export function EmailIndex() {
     <section className="email-index-container">
       <section className="index-header">
         <section className="email-index-header-hamb-n-logo">
-          <section className="email-index-header-hamb">
+          <button className="email-index-header-hamb-btn" onClick={() => {handleHambClick() }}>
             <RxHamburgerMenu />
-          </section>
+          </button>
           <section className="email-index-header-gmail-logo">
             <img src={logoUrl} alt="Gmail Logo" /> Gmail
           </section>
@@ -228,30 +233,33 @@ export function EmailIndex() {
         />
       </section>
 
-      <section className="email-index-sidebar">
-        <SideBar unreadCount={unreadCount} />
+      <section className="email-index-non-header">
+        <section className="email-index-sidebar">
+          <SideBar unreadCount={unreadCount} isOpen={isOpen} />
+        </section>
+
+        <section className="email-index-main">
+          {!emailId && (
+            <div className="email-filter-list">
+              <DropDownFilter filterBy={filterBy} onSetFilter={onSetFilter} />
+              {presentedEmails}
+            </div>
+          )}
+          {emailId && <Outlet />}
+        </section>
+
+        <section className="email-index-right"></section>
+
+          {shouldRenderCompose && (
+            <EmailCompose
+              onComposeExit={onComposeExit}
+              onComposeEmail={onComposeEmail}
+              loggedUser={loggedUser}
+            />
+          )}
+          <CustomMsg />
+        </section>
       </section>
-
-      <section className="email-index-main">
-        {!emailId && (
-          <div className="email-filter-list">
-            <DropDownFilter filterBy={filterBy} onSetFilter={onSetFilter} />
-            {presentedEmails}
-          </div>
-        )}
-        {emailId && <Outlet />}
-      </section>
-
-      <section className="email-index-right"></section>
-
-      {shouldRenderCompose && (
-        <EmailCompose
-          onComposeExit={onComposeExit}
-          onComposeEmail={onComposeEmail}
-          loggedUser={loggedUser}
-        />
-      )}
-      <CustomMsg />
-    </section>
+      
   );
 }

@@ -1,5 +1,6 @@
 .side-bar-container {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
 }
 
@@ -24,15 +25,19 @@
   font-weight: lighter;
 }
 
+.nav-name {
+  display: flex;
+  justify-content: space-between;
+}
 .side-bar-single-nav:hover {
   text-decoration: none;
   background-color: #e7f0ff;
 }
 
-.side-bar-single-nav-number{
-  margin-left: auto;
+.side-bar-single-nav-number.open{
+  margin-left: 120px;
 }
-.side-bar-navs .active {
+.active {
   font-weight: bold;
   background-color: #d3e3fd;
   color: #222326;
@@ -47,20 +52,25 @@
 
 .side-bar-compose {
   display: flex;
+  justify-content: center;
 
   border-radius: 16px;
   background-color: #c2e7fe;
-  padding: 18px 12px 0 13px;
+  padding: 16px 0 2px 13px;
 
   height: 56px;
-  width: 142px;
+  width: fit-content;
 
-  margin: 0px 0 0 16px;
+  margin: 2px 0 0 16px;
 
   border: none;
   
   font-family: "Google Sans", Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
   font-size: 14px;
   color: #001d35
+}
+
+.side-bar-compose.open {
+  padding-right: 20px;
 }
 

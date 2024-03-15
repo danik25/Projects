@@ -1,5 +1,6 @@
 import { storageService } from "./async-storage.services.js";
 import { utilService } from "./util.service.js";
+import dummyArr from '../assets/files/dummyArr.json'
 
 export const emailService = {
   query,
@@ -152,12 +153,7 @@ async function _createInputEmails() {
 }
 
 async function getDummyArr() {
-  const dummyEmailArr = await fetch("./src/assets/files/dummyArr.json");
+  const dummyEmailArr = dummyArr.emails
 
-  if (!dummyEmailArr.ok) {
-    console.log("Couldn't fetch dummy email list");
-  }
-
-  const data = await dummyEmailArr.json();
-  return data.emails;
+  return dummyEmailArr
 }
