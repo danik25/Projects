@@ -1,3 +1,10 @@
+.email-list {
+  flex-shrink: 1;
+}
 .email-list ul {
   margin-top: 0;
+}
+
+.email-list li {
+
 }

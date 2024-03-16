@@ -7,7 +7,7 @@
     bottom: 0;
 
     background-color: white;
-    position: absolute; /* Position element relative to its containing block */
+    position: absolute; 
     border-radius: 8px 8px 0 0;
     box-shadow: rgba(0,0,0,.2) 0 2px 6px;
     
@@ -147,3 +147,23 @@
     background-color: white;
     font-size: 22px;
 }
+
+/* Responsiveness */
+@media only screen and (max-width: 600px) {
+    .email-compose-container.normal{
+        width: 100vw;
+        height: 100vh;
+        margin: initial; /* Reset margin to initial value */
+        right: auto;
+    }
+    .compose-e-s-btn {
+        display: none;
+    }
+    .compose-minimize-btn {
+        display: none;
+    }
+    .compose-body{
+        height: 80vh;
+    }
+
+  }

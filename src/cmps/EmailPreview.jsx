@@ -73,7 +73,7 @@ export function EmailPreview({
       onMouseOver={onEmailHovered}
       onMouseOut={onEmailUnHovered}
     >
-      <input type="checkbox"></input>
+      <input className="email-preview-checkbox" type="checkbox"></input>
       <div className="email-preview-star" onClick={handleCheckboxChange}>
         {isStarMarked}
       </div>

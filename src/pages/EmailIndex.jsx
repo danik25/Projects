@@ -214,6 +214,7 @@ export function EmailIndex() {
     <EmptyFolder />
   );
 
+  const openClass = isOpen ? "open" : ""
   return (
     <section className="email-index-container">
       <section className="index-header">
@@ -234,7 +235,7 @@ export function EmailIndex() {
       </section>
 
       <section className="email-index-non-header">
-        <section className="email-index-sidebar">
+        <section className={`email-index-sidebar ${openClass}`}>
           <SideBar unreadCount={unreadCount} isOpen={isOpen} />
         </section>
 

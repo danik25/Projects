@@ -1,6 +1,8 @@
 .email-index-container {  
+  display: flex;
+  flex-direction: column;
   gap: 15px;
-  background-color: #f6f8fc;
+  background-color: #f4eeff;
   width: 100vw;
 
   height: 100vh;
@@ -25,11 +27,11 @@
 
 .email-index-main {
   background-color: #ffffff;
-  border-radius: 25px 25px 0 0;
+  border-radius: 25px;
   padding-top: 15px;
   height: 90vh;
   width: 100%;
-  white-space: no-wrap;
+  overflow: hidden;
 }
 
 .email-index-right {
@@ -66,6 +68,35 @@
 
 .email-filter-list {
   display: flex;
+  flex-shrink: 1;
   flex-direction: column;
   gap: 15px;
 }
+
+
+/* Responsiveness */
+@media only screen and (max-width: 600px) {
+  .email-index-container {
+    }
+    .email-index-sidebar:not(.open) {
+      display: none;
+    }
+    .email-index-right {
+      display: none;
+    }
+    .index-header {
+      width: 100vw;
+    }
+    .email-index-header-gmail-logo {
+      display: none;
+    }
+    .email-index-header-hamb-n-logo {
+      padding: 0;
+      margin: 0 10px;
+      width: fit-content;
+    }
+    .email-index-main {
+      margin-left: 25px;
+      margin-right: 25px;
+    }
+  }

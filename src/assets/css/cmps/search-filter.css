@@ -5,11 +5,11 @@
   border-radius: 24px;
 
   padding: 6px;
-  margin: 0 96px 0 35px;
-  background-color: #eaf1fb;
+  margin: 0 96px 0 47px;
+  background-color: #fefafb;
 
-  min-width: 580px;
-  max-width: 720px;
+  min-width: 400px;
+  width: 640px;
   height: 46px;
 }
 
@@ -19,7 +19,7 @@
   appearance: none; /* Other browsers */
 
   /* Apply your custom styles here */
-  background-color: #eaf1fb;
+  background-color: #fefafb;
   border: none;
   padding: 0;
   font: normal 16px Google Sans, Roboto, Helvetica, Arial, sans-serif;
@@ -31,4 +31,14 @@
   color: #7a7c7e;
   margin-top: 5px;
   padding: 6px;
+}
+
+/* Responsiveness */
+@media only screen and (max-width: 600px) {
+  .search-filter-container {
+    min-width: 0;
+    width: 100vw;
+    margin: 0px 15px 0 15px;
+  }
+ 
 }
